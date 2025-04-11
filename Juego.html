@@ -131,19 +131,19 @@
     </div>
 
     <script>
-        // 1. Array de 8 URLs correspondientes a las imágenes
+        // 1. Array 
         const imageUrls = [
-            'https://rickandmortyapi.com/api/character/avatar/1.jpeg',  // Rick
-            'https://rickandmortyapi.com/api/character/avatar/2.jpeg',  // Morty
-            'https://rickandmortyapi.com/api/character/avatar/3.jpeg',  // Summer
-            'https://rickandmortyapi.com/api/character/avatar/4.jpeg',  // Beth
-            'https://rickandmortyapi.com/api/character/avatar/5.jpeg',  // Jerry
-            'https://rickandmortyapi.com/api/character/avatar/8.jpeg',  // Adjudicator Rick
-            'https://rickandmortyapi.com/api/character/avatar/14.jpeg', // Alien Rick
-            'https://rickandmortyapi.com/api/character/avatar/20.jpeg'  // Ants in my Eyes Johnson
+            'https://rickandmortyapi.com/api/character/avatar/1.jpeg',  
+            'https://rickandmortyapi.com/api/character/avatar/2.jpeg', 
+            'https://rickandmortyapi.com/api/character/avatar/3.jpeg',  
+            'https://rickandmortyapi.com/api/character/avatar/4.jpeg',  
+            'https://rickandmortyapi.com/api/character/avatar/5.jpeg',  
+            'https://rickandmortyapi.com/api/character/avatar/8.jpeg',  
+            'https://rickandmortyapi.com/api/character/avatar/14.jpeg', 
+            'https://rickandmortyapi.com/api/character/avatar/20.jpeg'  
         ];
 
-        // Variables globales del juego
+  
         let cards = [];
         let flippedCards = [];
         let matchedPairs = 0;
@@ -152,44 +152,42 @@
         let timerSeconds = 0;
         let canFlip = false;
         let gameStarted = false;
-        
-        // Referencias a elementos DOM
+      
         const gameGrid = document.getElementById('gameGrid');
         const scoreElement = document.getElementById('score');
         const timerElement = document.getElementById('timer');
         const messageElement = document.getElementById('message');
         const restartButton = document.getElementById('restartButton');
         
-        // Inicializar el juego
         initGame();
         
-        // Evento para reiniciar el juego
+   
         restartButton.addEventListener('click', restartGame);
         
         function initGame() {
-            // 2. Generar array de 16 imágenes (duplicando cada URL del array anterior)
+          
             cards = [...imageUrls, ...imageUrls];
             
-            // 4. Ordenar aleatoriamente el array de 16
+            
             shuffleCards();
             
-            // 3. Pintar el array de 16 en el front
+            
             renderCards();
             
-            // Mostrar mensaje inicial
+          
             messageElement.textContent = "Memoriza las cartas, se ocultarán en 5 segundos...";
             
-            // Mostrar cartas durante 5 segundos y luego ocultarlas
+            
             showAllCardsInitially();
             
-            // Reiniciar contadores
+        
             matchedPairs = 0;
             score = 0;
             updateScore();
         }
         
         function shuffleCards() {
-            // Algoritmo de Fisher-Yates para mezclar array
+            
             for (let i = cards.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [cards[i], cards[j]] = [cards[j], cards[i]];
@@ -197,10 +195,10 @@
         }
         
         function renderCards() {
-            // Limpiar el grid
+          
             gameGrid.innerHTML = '';
             
-            // Crear elementos de carta
+           
             cards.forEach((url, index) => {
                 const card = document.createElement('div');
                 card.className = 'card';
@@ -220,57 +218,57 @@
                 card.appendChild(cardFront);
                 card.appendChild(cardBack);
                 
-                // 7. Lógica que permita "destapar" cada imagen con un click
+                
                 card.addEventListener('click', () => flipCard(card, index));
                 
                 gameGrid.appendChild(card);
             });
         }
         
-        // 6. Mostrar cada imagen 5 segundos al inicio y luego "tapar"
+      
         function showAllCardsInitially() {
             const allCards = document.querySelectorAll('.card');
             allCards.forEach(card => {
                 card.classList.add('flipped');
             });
             
-            // Después de 5 segundos, ocultar todas las cartas y comenzar el juego
+            
             setTimeout(() => {
                 allCards.forEach(card => {
                     card.classList.remove('flipped');
                 });
-                canFlip = true; // Permitir voltear cartas después de mostrarlas
+                canFlip = true; 
                 gameStarted = true;
                 messageElement.textContent = "¡Comienza el juego!";
-                // 10. Iniciar cronómetro
+                
                 startTimer();
             }, 5000);
         }
         
-        // 5 y 7. Lógica para escoger dos imágenes y verificar si son iguales
+     
         function flipCard(card, index) {
-            // Verificar si se puede voltear la carta
+          
             if (!canFlip || flippedCards.length >= 2 || card.classList.contains('flipped') || card.classList.contains('matched')) {
                 return;
             }
             
-            // Voltear la carta
+            
             card.classList.add('flipped');
             flippedCards.push({ card, index });
             
-            // Si ya se voltearon dos cartas, verificar si coinciden
+           
             if (flippedCards.length === 2) {
                 checkForMatch();
             }
         }
         
-        // 8. Lógica que permita dejar destapadas las imágenes iguales o tapar de nuevo
+        
         function checkForMatch() {
             const [card1, card2] = flippedCards;
             const isMatch = cards[card1.index] === cards[card2.index];
             
             if (isMatch) {
-                // 9. Lógica para sumar puntos por cada pareja destapada
+                
                 handleMatch();
             } else {
                 handleMismatch();
@@ -283,25 +281,24 @@
                 card.style.cursor = 'default';
             });
             
-            // Actualizar puntuación
+      
             score += 10;
             updateScore();
             matchedPairs++;
             
-            // Verificar si se ha completado el juego
             if (matchedPairs === imageUrls.length) {
                 endGame();
             }
             
-            // Limpiar array de cartas volteadas
+           
             flippedCards = [];
         }
         
         function handleMismatch() {
-            // Deshabilitar temporalmente la interacción
+          
             canFlip = false;
             
-            // Esperar un segundo y luego voltear las cartas de nuevo
+            
             setTimeout(() => {
                 flippedCards.forEach(({ card }) => {
                     card.classList.remove('flipped');
@@ -311,18 +308,18 @@
             }, 1000);
         }
         
-        // 10. Cronómetro que tome el tiempo de destapar todas las imágenes
+        
         function startTimer() {
-            // Reiniciar el tiempo
+           
             timerSeconds = 0;
             timerElement.textContent = timerSeconds;
             
-            // Limpiar intervalo anterior si existe
+          
             if (timerInterval) {
                 clearInterval(timerInterval);
             }
             
-            // Iniciar nuevo intervalo
+            
             timerInterval = setInterval(() => {
                 timerSeconds++;
                 timerElement.textContent = timerSeconds;
@@ -330,15 +327,15 @@
         }
         
         function endGame() {
-            // Detener el cronómetro
+            
             clearInterval(timerInterval);
             
-            // Calcular bonificación por tiempo
+            
             const timeBonus = Math.max(0, 100 - timerSeconds);
             score += timeBonus;
             updateScore();
             
-            // Mostrar mensaje de finalización
+          
             messageElement.textContent = `¡Juego completado! Bonus por tiempo: +${timeBonus}`;
             canFlip = false;
         }
@@ -348,19 +345,19 @@
         }
         
         function restartGame() {
-            // Reiniciar todas las variables y comenzar de nuevo
+            
             flippedCards = [];
             matchedPairs = 0;
             score = 0;
             canFlip = false;
             gameStarted = false;
             
-            // Detener el cronómetro actual si existe
+            
             if (timerInterval) {
                 clearInterval(timerInterval);
             }
             
-            // Reiniciar interfaz y juego
+         
             initGame();
         }
     </script>
