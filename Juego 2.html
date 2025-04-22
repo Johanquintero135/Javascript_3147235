@@ -152,7 +152,7 @@
         //Aquí se cambio el codigo pues esto permite tener distintas combinaciones de personajes en cada partida
         async function fetchImageUrls() {
             try {
-            const randomPage = Math.floor(Math.random() * 42) + 1; // 1 a 42
+            const randomPage = Math.floor(Math.random() * 80) + 1; 
             const response = await fetch(`https://rickandmortyapi.com/api/character?page=${randomPage}`);
             const data = await response.json();
 
